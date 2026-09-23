@@ -9,6 +9,10 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
 
+    [Header("Controls")]
+    [SerializeField] private InputAction moveAction;
+    [SerializeField] private InputAction jumpAction;
+
     [Header("Horizontal Movement")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float accelerationWeight = 10f;
@@ -23,7 +27,9 @@ public class Player : MonoBehaviour
     private bool grounded;
 
     [Header("Jumping")]
-    [SerializeField] private float jumpForce = 50f;
+    [SerializeField] private float jumpForce = 6f;
+    [SerializeField] private float jumpReduction = .5f;
+    [SerializeField] private float gravityMultiplier = .5f;
     [SerializeField] private float jumpBufferTimer = .15f;
     [SerializeField] private float coyoteTimer = .15f;
     private float jumpBufferCounter;
@@ -34,8 +40,31 @@ public class Player : MonoBehaviour
         //à compléter
     }
 
+    private void OnEnable()
+    {
+        moveAction.Enable();
+        jumpAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveAction.Disable();
+        jumpAction.Disable();
+    }
+
     private void Update()
     {
+        currentMoveInput = moveAction.ReadValue<Vector2>();
+        Debug.Log(currentMoveInput);
+        if (jumpAction.WasPressedThisFrame())
+        {
+            jumpBufferCounter = jumpBufferTimer;
+        }
+        else if (jumpAction.WasReleasedThisFrame() && rb.linearVelocityY > 0)
+        {
+            rb.linearVelocityY *= jumpReduction;
+        }
+
         grounded = isGrounded();
 
         if (grounded)
@@ -64,23 +93,23 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnMove(InputValue inputValue)
-    {
-        currentMoveInput = inputValue.Get<Vector2>();
-    }
+    //public void OnMove(InputValue inputValue)
+    //{
+    //    currentMoveInput = inputValue.Get<Vector2>();
+    //}
 
-    public void OnJump(InputValue inputValue)
-    {
-        if (inputValue.isPressed)
-        {
-            jumpBufferCounter = jumpBufferTimer;
-            Debug.Log("Jump pressed");
-        }
-        else
-        {
-            Debug.Log("Jump released");
-        }
-    }
+    //public void OnJump(InputValue inputValue)
+    //{
+    //    if (inputValue.isPressed)
+    //    {
+    //        jumpBufferCounter = jumpBufferTimer;
+    //        Debug.Log("Jump pressed");
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Jump released");
+    //    }
+    //}
 
     public bool isGrounded()
     {
