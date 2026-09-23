@@ -55,7 +55,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         currentMoveInput = moveAction.ReadValue<Vector2>();
-        Debug.Log(currentMoveInput);
         if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTimer;
