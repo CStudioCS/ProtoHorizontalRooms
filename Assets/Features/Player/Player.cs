@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float accelerationWeight = 10f;
     [SerializeField] private float frictionWeight = 8f;
-    private Vector2 currentMoveInput;
+    private float currentMoveInput;
 
     [Header("Ground Detection")]
     [SerializeField] private float rayLength = 0.3f;
@@ -29,15 +29,23 @@ public class Player : MonoBehaviour
     [Header("Jumping")]
     [SerializeField] private float jumpForce = 6f;
     [SerializeField] private float jumpReduction = .5f;
-    [SerializeField] private float gravityMultiplier = .5f;
+    [SerializeField] private float gravityScale = 3f;
+    [SerializeField] private float gravityApexMultiplier = .5f;
+    [SerializeField] private float gravityFallMultiplier = 2f;
     [SerializeField] private float jumpBufferTimer = .15f;
     [SerializeField] private float coyoteTimer = .15f;
-    private float jumpBufferCounter;
-    private float coyoteCounter;
+    [SerializeField] private float apexTimer = .15f;
+    private float jumpBufferCounter, coyoteCounter;
+    private bool apexed;
+
+    [Header("Visuals")]
+    [SerializeField] private GameObject sprite;
+    [SerializeField] private Vector2 stretch = new Vector2(.5f, 1f);
+    [SerializeField] private Vector2 squash = new Vector2(1.5f, .5f);
 
     private void Awake()
     {
-        //à compléter
+        rb.gravityScale = gravityScale;
     }
 
     private void OnEnable()
@@ -54,7 +62,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        currentMoveInput = moveAction.ReadValue<Vector2>();
+        bool prevGrounded = grounded;
+        currentMoveInput = moveAction.ReadValue<float>();
+
+        grounded = isGrounded();
+
         if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTimer;
@@ -64,11 +76,11 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
-        grounded = isGrounded();
-
         if (grounded)
         {
             coyoteCounter = coyoteTimer;
+            rb.gravityScale = gravityScale;
+            apexed = false;
         }
         else if (coyoteCounter > 0)
         {
@@ -79,36 +91,36 @@ public class Player : MonoBehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
+
+        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
+        {
+            rb.gravityScale = gravityApexMultiplier * gravityScale;
+            apexed = true;
+        }
+        else if (apexed && rb.linearVelocityY < -0.5f)
+        {
+            rb.gravityScale = gravityFallMultiplier * gravityScale;
+        }
+
+        if (!prevGrounded && grounded)
+        {
+            sprite.transform.localScale = squash;
+        }
+        sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, new Vector2(1f, 1f), 10 * Time.deltaTime);
+
+        Debug.Log(rb.linearVelocityX);
     }
 
     private void FixedUpdate()
     {
-        float weight = Mathf.Abs(currentMoveInput.x) > 0 ? accelerationWeight : frictionWeight;
-        rb.linearVelocityX = Mathf.Lerp(rb.linearVelocityX, currentMoveInput.x * moveSpeed, weight);
+        float weight = Mathf.Abs(currentMoveInput) > 0 ? accelerationWeight : frictionWeight;
+        rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
 
         if (jumpBufferCounter > 0 && coyoteCounter > 0)
         {
             Jump();
         }
     }
-
-    //public void OnMove(InputValue inputValue)
-    //{
-    //    currentMoveInput = inputValue.Get<Vector2>();
-    //}
-
-    //public void OnJump(InputValue inputValue)
-    //{
-    //    if (inputValue.isPressed)
-    //    {
-    //        jumpBufferCounter = jumpBufferTimer;
-    //        Debug.Log("Jump pressed");
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Jump released");
-    //    }
-    //}
 
     public bool isGrounded()
     {
@@ -121,11 +133,11 @@ public class Player : MonoBehaviour
 
         jumpBufferCounter = 0;
         coyoteCounter = 0;
+        sprite.transform.localScale = stretch;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.DrawCube(transform.position - transform.up * rayLength, boxSize);
     }
-
 }
