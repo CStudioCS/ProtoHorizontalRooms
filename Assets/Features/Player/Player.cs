@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -65,8 +64,9 @@ public class Player : MonoBehaviour
     {
         bool prevGrounded = grounded;
         currentMoveInput = moveAction.ReadValue<float>();
-        
+
         grounded = isGrounded();
+
         if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTimer;
@@ -92,17 +92,17 @@ public class Player : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if(Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
+        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
         {
             rb.gravityScale = gravityApexMultiplier * gravityScale;
             apexed = true;
         }
-        else if(apexed && rb.linearVelocityY < -0.5f)
+        else if (apexed && rb.linearVelocityY < -0.5f)
         {
             rb.gravityScale = gravityFallMultiplier * gravityScale;
         }
 
-        if(!prevGrounded && grounded)
+        if (!prevGrounded && grounded)
         {
             sprite.transform.localScale = squash;
         }
