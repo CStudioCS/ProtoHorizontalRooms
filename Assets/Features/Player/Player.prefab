@@ -58,7 +58,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.67, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6766021709638923293}
@@ -225,6 +225,24 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+  invertedGravityAction:
+    m_Name: Inverted Gravity
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: beb405ac-f513-4ca0-8962-4eff87ada930
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 7b645f41-d781-41ac-8e7d-dd95a843f3b0
+      m_Path: <Keyboard>/g
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Inverted Gravity
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
   moveSpeed: 7
   accelerationWeight: 100
   frictionWeight: 80
@@ -234,14 +252,14 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  jumpForce: 14
+  jumpForce: 15
   jumpReduction: 0.5
-  gravityScale: 4
-  gravityApexMultiplier: 0.5
-  gravityFallMultiplier: 1.5
   jumpBufferTimer: 0.15
   coyoteTimer: 0.15
-  apexTimer: 0.15
+  gravityModifier: 1
+  gravity: 40
+  gravityApexMultiplier: 0.5
+  gravityFallMultiplier: 2
   sprite: {fileID: 8075130798912793345}
   stretch: {x: 0.5, y: 1}
   squash: {x: 1.5, y: 0.5}
@@ -260,7 +278,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

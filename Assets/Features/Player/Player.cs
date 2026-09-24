@@ -14,9 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction jumpAction;
 
     [Header("Horizontal Movement")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float accelerationWeight = 10f;
-    [SerializeField] private float frictionWeight = 8f;
+    public float moveSpeed = 5f;
+    public float accelerationWeight = 10f;
+    public float frictionWeight = 8f;
     private float currentMoveInput;
 
     [Header("Ground Detection")]
@@ -27,16 +27,18 @@ public class Player : MonoBehaviour
     private bool grounded;
 
     [Header("Jumping")]
-    [SerializeField] private float jumpForce = 6f;
+    public float jumpForce = 15f;
     [SerializeField] private float jumpReduction = .5f;
-    [SerializeField] private float gravityScale = 3f;
-    [SerializeField] private float gravityApexMultiplier = .5f;
-    [SerializeField] private float gravityFallMultiplier = 2f;
     [SerializeField] private float jumpBufferTimer = .15f;
     [SerializeField] private float coyoteTimer = .15f;
-    [SerializeField] private float apexTimer = .15f;
     private float jumpBufferCounter, coyoteCounter;
     private bool apexed;
+
+    [Header("Falling")]
+    public int gravityModifier = 1;
+    public float gravity = 40f;
+    [SerializeField] private float gravityApexMultiplier = .5f;
+    [SerializeField] private float gravityFallMultiplier = 2f;
 
     [Header("Visuals")]
     [SerializeField] private GameObject sprite;
@@ -45,7 +47,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        rb.gravityScale = gravityScale;
+        rb.gravityScale = 0;
     }
 
     private void OnEnable()
@@ -71,7 +73,7 @@ public class Player : MonoBehaviour
         {
             jumpBufferCounter = jumpBufferTimer;
         }
-        else if (jumpAction.WasReleasedThisFrame() && rb.linearVelocityY > 0)
+        else if (jumpAction.WasReleasedThisFrame() && rb.linearVelocityY * gravityModifier > 0)
         {
             rb.linearVelocityY *= jumpReduction;
         }
@@ -79,7 +81,6 @@ public class Player : MonoBehaviour
         if (grounded)
         {
             coyoteCounter = coyoteTimer;
-            rb.gravityScale = gravityScale;
             apexed = false;
         }
         else if (coyoteCounter > 0)
@@ -92,14 +93,19 @@ public class Player : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
+        // Handle Gravity
         if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
         {
-            rb.gravityScale = gravityApexMultiplier * gravityScale;
+            rb.linearVelocityY -= gravity * gravityApexMultiplier * gravityModifier * Time.deltaTime;
             apexed = true;
         }
-        else if (apexed && rb.linearVelocityY < -0.5f)
+        else if (apexed && rb.linearVelocityY * gravityModifier < -0.5f)
         {
-            rb.gravityScale = gravityFallMultiplier * gravityScale;
+            rb.linearVelocityY -= gravity * gravityFallMultiplier * gravityModifier * Time.deltaTime;
+        }
+        else if (!grounded)
+        {
+            rb.linearVelocityY -= gravity * gravityModifier * Time.deltaTime;
         }
 
         if (!prevGrounded && grounded)
@@ -107,8 +113,6 @@ public class Player : MonoBehaviour
             sprite.transform.localScale = squash;
         }
         sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, new Vector2(1f, 1f), 10 * Time.deltaTime);
-
-        Debug.Log(rb.linearVelocityX);
     }
 
     private void FixedUpdate()
@@ -124,20 +128,25 @@ public class Player : MonoBehaviour
 
     public bool isGrounded()
     {
-        return Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, rayLength, groundLayer);
+        return Physics2D.BoxCast(transform.position, boxSize, 0, -gravityModifier * transform.up, rayLength, groundLayer);
     }
 
     void Jump()
     {
-        rb.linearVelocityY = jumpForce;
+        rb.linearVelocityY = jumpForce * gravityModifier;
 
         jumpBufferCounter = 0;
         coyoteCounter = 0;
         sprite.transform.localScale = stretch;
     }
 
+    public void SetInvertedGravity(bool inverted)
+    {
+        gravityModifier = inverted ? -1 : 1;
+    }
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position - transform.up * rayLength, boxSize);
+        Gizmos.DrawCube(transform.position - gravityModifier * transform.up * rayLength, boxSize);
     }
 }
