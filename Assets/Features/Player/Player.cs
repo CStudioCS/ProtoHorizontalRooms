@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpReduction = .5f;
     [SerializeField] private float jumpBufferTimer = .15f;
     [SerializeField] private float coyoteTimer = .15f;
+    private MovingPlatform currentPlatform;
     private float jumpBufferCounter, coyoteCounter;
     private bool apexed;
 
@@ -114,8 +115,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float targetSpeed = currentMoveInput * moveSpeed;
+
+        bool isBoosted = Mathf.Abs(rb.linearVelocityX) > moveSpeed;
+        bool isMovingWithBoost = currentMoveInput == 0 || Mathf.Sign(rb.linearVelocityX) == Mathf.Sign(currentMoveInput);
+        
         float weight = Mathf.Abs(currentMoveInput) > 0 ? accelerationWeight : frictionWeight;
-        rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
+        if(isBoosted && isMovingWithBoost && !isGrounded()) weight = 2f;
+
+        rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, targetSpeed, weight * Time.fixedDeltaTime);
 
         // Handle Gravity
         //if (!isGrounded())
@@ -132,7 +140,9 @@ public class Player : MonoBehaviour
 
     public bool isGrounded()
     {
-        return Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
+        Collider2D groundCollider = Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
+        if (groundCollider != null) currentPlatform = groundCollider.GetComponent<MovingPlatform>();
+        return groundCollider != null;
     }
 
     public float getTotalGravity()
@@ -152,7 +162,15 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        rb.linearVelocityY = jumpForce * gravityModifier;
+        Vector2 jumpVelocity = new Vector2(rb.linearVelocityX, jumpForce * gravityModifier);
+
+        if(currentPlatform != null)
+        {
+            Vector2 platformVelocity = currentPlatform.liftVelocity;
+            if(platformVelocity.y * gravityModifier >= 0) jumpVelocity += platformVelocity;
+        }
+
+        rb.linearVelocity = jumpVelocity;
 
         jumpBufferCounter = 0;
         coyoteCounter = 0;
