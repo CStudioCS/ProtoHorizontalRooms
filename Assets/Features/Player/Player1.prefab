@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: moveAction.m_SingletonActionBindings.Array.data[1].m_Flags
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/e
+      objectReference: {fileID: 0}
     - target: {fileID: 4571358873585361581, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime1
       value: 65535
@@ -138,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8339870996444838344, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Name
-      value: Blue Player Variant
+      value: Player1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4571358873585361581, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
