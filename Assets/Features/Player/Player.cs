@@ -43,6 +43,7 @@ public class Player : MonoBehaviour
     public float gravity = 40f;
     [SerializeField] private float gravityApexMultiplier = .5f;
     [SerializeField] private float gravityFallMultiplier = 2f;
+    [SerializeField] private float maxFallSpeed = 2f;
 
     [Header("Visuals")]
     [SerializeField] private GameObject visuals;
@@ -117,7 +118,11 @@ public class Player : MonoBehaviour
         rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
 
         // Handle Gravity
-        if (!isGrounded()) rb.linearVelocityY -= getTotalGravity() * Time.fixedDeltaTime;
+        if (!isGrounded())
+        {
+            rb.linearVelocityY -= getTotalGravity() * Time.fixedDeltaTime;
+            if (rb.linearVelocityY * gravityModifier < -maxFallSpeed) rb.linearVelocityY = -gravityModifier * maxFallSpeed;
+        }
 
         if (jumpBufferCounter > 0 && coyoteCounter > 0)
         {

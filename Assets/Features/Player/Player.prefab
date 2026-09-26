@@ -377,14 +377,15 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  jumpForce: 14
+  jumpForce: 16
   jumpReduction: 0.5
   jumpBufferTimer: 0.15
   coyoteTimer: 0.15
   gravityModifier: 1
-  gravity: 35
+  gravity: 50
   gravityApexMultiplier: 0.5
   gravityFallMultiplier: 2
+  maxFallSpeed: 16
   visuals: {fileID: 6991185747479774446}
   sprite: {fileID: 8075130798912793345}
   dust: {fileID: 7443321042056732980}
