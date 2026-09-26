@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5f;
     public float accelerationWeight = 10f;
     public float frictionWeight = 8f;
+    public bool isFacingRight = true;
     private float currentMoveInput;
 
     [Header("Ground Detection")]
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
     [Header("Visuals")]
     [SerializeField] private GameObject visuals;
     [SerializeField] private GameObject sprite;
+    [SerializeField] private ParticleSystem dust;
     [SerializeField] private Vector2 stretch = new Vector2(.5f, 1f);
     [SerializeField] private Vector2 squash = new Vector2(1.5f, .5f);
     private Vector2 originalScale;
@@ -61,19 +63,23 @@ public class Player : MonoBehaviour
     {
         moveAction.Enable();
         jumpAction.Enable();
+        useAbilityAction.Enable();
     }
 
     private void OnDisable()
     {
         moveAction.Disable();
         jumpAction.Disable();
+        useAbilityAction.Disable();
     }
 
     private void Update()
     {
-        bool prevGrounded = grounded;
         currentMoveInput = moveAction.ReadValue<float>();
+        if(currentMoveInput > 0 && !isFacingRight) HorizontalFlip();
+        else if (currentMoveInput < 0 && isFacingRight) HorizontalFlip();
 
+        bool prevGrounded = grounded;
         grounded = isGrounded();
 
         // Jump Input
@@ -100,8 +106,9 @@ public class Player : MonoBehaviour
         coyoteCounter -= Time.deltaTime;
         jumpBufferCounter -= Time.deltaTime;
 
-        if (!prevGrounded && grounded) sprite.transform.localScale = originalScale * squash;
+        if (!prevGrounded && grounded) Land();
         sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, originalScale, 10 * Time.deltaTime);
+        visuals.transform.localRotation = Quaternion.Lerp(visuals.transform.localRotation, Quaternion.Euler(0, 0, rb.linearVelocityX * gravityModifier), 10 * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -126,9 +133,10 @@ public class Player : MonoBehaviour
     public float getTotalGravity()
     {
         float totalGravity = gravity * gravityModifier;
-        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
+        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded)
         {
             totalGravity = gravity * gravityApexMultiplier * gravityModifier;
+            apexed = true;
         }
         else if (apexed && rb.linearVelocityY * gravityModifier < -0.5f)
         {
@@ -144,13 +152,29 @@ public class Player : MonoBehaviour
         jumpBufferCounter = 0;
         coyoteCounter = 0;
         sprite.transform.localScale = originalScale * stretch;
+        dust.Play();
+    }
+
+    void HorizontalFlip()
+    {
+        print("Flipping");
+        isFacingRight = currentMoveInput >= 0;
+        visuals.transform.localScale = new Vector3(isFacingRight ? 1 : -1, visuals.transform.localScale.y, visuals.transform.localScale.z);
+        if(grounded) dust.Play();
+    }
+
+    void Land()
+    {
+        rb.linearVelocityY = 0f;
+        sprite.transform.localScale = originalScale * squash;
+        dust.Play();
     }
 
     public void SetInvertedGravity(bool inverted)
     {
         gravityModifier = inverted ? -1 : 1;
         groundCheck.localPosition = new Vector3(initialGroundCheckPosition.x, initialGroundCheckPosition.y * gravityModifier, initialGroundCheckPosition.z);
-        visuals.transform.localScale = new Vector3(1, gravityModifier, 1);
+        visuals.transform.localScale = new Vector3(visuals.transform.localScale.x, gravityModifier, visuals.transform.localScale.z);
     }
 
     void OnDrawGizmos()
