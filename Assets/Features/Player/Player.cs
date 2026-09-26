@@ -20,10 +20,10 @@ public class Player : MonoBehaviour
     private float currentMoveInput;
 
     [Header("Ground Detection")]
-    [SerializeField] private float rayLength = 0.3f;
-    [SerializeField] private Vector2 boxSize = new Vector2(0.5f, 0.1f);
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private Vector2 boxSize = new Vector2(0.5f, 0.1f);
     [SerializeField] private LayerMask groundLayer;
+    private Vector3 initialGroundCheckPosition;
     private bool grounded;
 
     [Header("Jumping")]
@@ -41,13 +41,17 @@ public class Player : MonoBehaviour
     [SerializeField] private float gravityFallMultiplier = 2f;
 
     [Header("Visuals")]
+    [SerializeField] private GameObject visuals;
     [SerializeField] private GameObject sprite;
     [SerializeField] private Vector2 stretch = new Vector2(.5f, 1f);
     [SerializeField] private Vector2 squash = new Vector2(1.5f, .5f);
+    private Vector2 originalScale;
 
     private void Awake()
     {
         rb.gravityScale = 0;
+        originalScale = sprite.transform.localScale;
+        initialGroundCheckPosition = groundCheck.localPosition;
     }
 
     private void OnEnable()
@@ -69,6 +73,7 @@ public class Player : MonoBehaviour
 
         grounded = isGrounded();
 
+        // Jump Input
         if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTimer;
@@ -78,41 +83,20 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
+        // Jump Buffer and Coyote Time
         if (grounded)
         {
             coyoteCounter = coyoteTimer;
             apexed = false;
         }
-        else if (coyoteCounter > 0)
-        {
-            coyoteCounter -= Time.deltaTime;
-        }
-
-        if (jumpBufferCounter > 0)
-        {
-            jumpBufferCounter -= Time.deltaTime;
-        }
+        coyoteCounter -= Time.deltaTime;
+        jumpBufferCounter -= Time.deltaTime;
 
         // Handle Gravity
-        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
-        {
-            rb.linearVelocityY -= gravity * gravityApexMultiplier * gravityModifier * Time.deltaTime;
-            apexed = true;
-        }
-        else if (apexed && rb.linearVelocityY * gravityModifier < -0.5f)
-        {
-            rb.linearVelocityY -= gravity * gravityFallMultiplier * gravityModifier * Time.deltaTime;
-        }
-        else if (!grounded)
-        {
-            rb.linearVelocityY -= gravity * gravityModifier * Time.deltaTime;
-        }
+        if (!grounded) rb.linearVelocityY -= getTotalGravity() * Time.deltaTime;
 
-        if (!prevGrounded && grounded)
-        {
-            sprite.transform.localScale = squash;
-        }
-        sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, new Vector2(1f, 1f), 10 * Time.deltaTime);
+        if (!prevGrounded && grounded) sprite.transform.localScale = originalScale * squash;
+        sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, originalScale, 10 * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -128,7 +112,21 @@ public class Player : MonoBehaviour
 
     public bool isGrounded()
     {
-        return Physics2D.BoxCast(transform.position, boxSize, 0, -gravityModifier * transform.up, rayLength, groundLayer);
+        return Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
+    }
+
+    public float getTotalGravity()
+    {
+        float totalGravity = gravity * gravityModifier;
+        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
+        {
+            totalGravity = gravity * gravityApexMultiplier * gravityModifier;
+        }
+        else if (apexed && rb.linearVelocityY * gravityModifier < -0.5f)
+        {
+            totalGravity = gravity * gravityFallMultiplier * gravityModifier;
+        }
+        return totalGravity;
     }
 
     void Jump()
@@ -137,16 +135,18 @@ public class Player : MonoBehaviour
 
         jumpBufferCounter = 0;
         coyoteCounter = 0;
-        sprite.transform.localScale = stretch;
+        sprite.transform.localScale = originalScale * stretch;
     }
 
     public void SetInvertedGravity(bool inverted)
     {
         gravityModifier = inverted ? -1 : 1;
+        groundCheck.localPosition = new Vector3(initialGroundCheckPosition.x, initialGroundCheckPosition.y * gravityModifier, initialGroundCheckPosition.z);
+        visuals.transform.localScale = new Vector3(1, gravityModifier, 1);
     }
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position - gravityModifier * transform.up * rayLength, boxSize);
+        if(groundCheck)Gizmos.DrawCube(groundCheck.position, boxSize);
     }
 }
