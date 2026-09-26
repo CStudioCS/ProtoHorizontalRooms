@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 670742933005680257, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1006784075463321324, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_GravityScale
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3495349552779745172, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_SortingOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3977295974681215098, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Color.b
