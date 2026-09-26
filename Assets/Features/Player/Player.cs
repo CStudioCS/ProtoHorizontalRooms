@@ -157,7 +157,6 @@ public class Player : MonoBehaviour
 
     void HorizontalFlip()
     {
-        print("Flipping");
         isFacingRight = currentMoveInput >= 0;
         visuals.transform.localScale = new Vector3(isFacingRight ? 1 : -1, visuals.transform.localScale.y, visuals.transform.localScale.z);
         if(grounded) dust.Play();
