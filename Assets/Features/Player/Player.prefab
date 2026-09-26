@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3256111709402442262}
   - component: {fileID: 670742933005680257}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -100,7 +100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4380973961463484375}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8175652945626266006}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5657163089018170415}
   - component: {fileID: 3495349552779745172}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 4278404934786924292}
   - component: {fileID: 1006784075463321324}
   - component: {fileID: 7573515635320103377}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,6 +499,10 @@ PrefabInstance:
     - target: {fileID: 2742991378433405382, guid: abc6c40eac4421149bb00bfac4de7bfb, type: 3}
       propertyPath: m_Name
       value: Dust Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 2742991378433405382, guid: abc6c40eac4421149bb00bfac4de7bfb, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6436498196886366539, guid: abc6c40eac4421149bb00bfac4de7bfb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

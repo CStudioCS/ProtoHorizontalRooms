@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 670742933005680257, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1006784075463321324, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_GravityScale
       value: 4
@@ -23,6 +27,10 @@ PrefabInstance:
     - target: {fileID: 3495349552779745172, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Color.r
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3495349552779745172, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3977295974681215098, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Color.b

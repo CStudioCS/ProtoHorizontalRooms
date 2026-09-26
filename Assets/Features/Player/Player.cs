@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
         rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
 
         // Handle Gravity
-        if (!isGrounded())
+        //if (!isGrounded())
         {
             rb.linearVelocityY -= getTotalGravity() * Time.fixedDeltaTime;
             if (rb.linearVelocityY * gravityModifier < -maxFallSpeed) rb.linearVelocityY = -gravityModifier * maxFallSpeed;
