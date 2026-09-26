@@ -14,38 +14,44 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction jumpAction;
 
     [Header("Horizontal Movement")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float accelerationWeight = 10f;
-    [SerializeField] private float frictionWeight = 8f;
+    public float moveSpeed = 5f;
+    public float accelerationWeight = 10f;
+    public float frictionWeight = 8f;
     private float currentMoveInput;
 
     [Header("Ground Detection")]
-    [SerializeField] private float rayLength = 0.3f;
-    [SerializeField] private Vector2 boxSize = new Vector2(0.5f, 0.1f);
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private Vector2 boxSize = new Vector2(0.5f, 0.1f);
     [SerializeField] private LayerMask groundLayer;
+    private Vector3 initialGroundCheckPosition;
     private bool grounded;
 
     [Header("Jumping")]
-    [SerializeField] private float jumpForce = 6f;
+    public float jumpForce = 15f;
     [SerializeField] private float jumpReduction = .5f;
-    [SerializeField] private float gravityScale = 3f;
-    [SerializeField] private float gravityApexMultiplier = .5f;
-    [SerializeField] private float gravityFallMultiplier = 2f;
     [SerializeField] private float jumpBufferTimer = .15f;
     [SerializeField] private float coyoteTimer = .15f;
-    [SerializeField] private float apexTimer = .15f;
     private float jumpBufferCounter, coyoteCounter;
     private bool apexed;
 
+    [Header("Falling")]
+    public int gravityModifier = 1;
+    public float gravity = 40f;
+    [SerializeField] private float gravityApexMultiplier = .5f;
+    [SerializeField] private float gravityFallMultiplier = 2f;
+
     [Header("Visuals")]
+    [SerializeField] private GameObject visuals;
     [SerializeField] private GameObject sprite;
     [SerializeField] private Vector2 stretch = new Vector2(.5f, 1f);
     [SerializeField] private Vector2 squash = new Vector2(1.5f, .5f);
+    private Vector2 originalScale;
 
     private void Awake()
     {
-        rb.gravityScale = gravityScale;
+        rb.gravityScale = 0;
+        originalScale = sprite.transform.localScale;
+        initialGroundCheckPosition = groundCheck.localPosition;
     }
 
     private void OnEnable()
@@ -67,48 +73,30 @@ public class Player : MonoBehaviour
 
         grounded = isGrounded();
 
+        // Jump Input
         if (jumpAction.WasPressedThisFrame())
         {
             jumpBufferCounter = jumpBufferTimer;
         }
-        else if (jumpAction.WasReleasedThisFrame() && rb.linearVelocityY > 0)
+        else if (jumpAction.WasReleasedThisFrame() && rb.linearVelocityY * gravityModifier > 0)
         {
             rb.linearVelocityY *= jumpReduction;
         }
 
+        // Jump Buffer and Coyote Time
         if (grounded)
         {
             coyoteCounter = coyoteTimer;
-            rb.gravityScale = gravityScale;
             apexed = false;
         }
-        else if (coyoteCounter > 0)
-        {
-            coyoteCounter -= Time.deltaTime;
-        }
+        coyoteCounter -= Time.deltaTime;
+        jumpBufferCounter -= Time.deltaTime;
 
-        if (jumpBufferCounter > 0)
-        {
-            jumpBufferCounter -= Time.deltaTime;
-        }
+        // Handle Gravity
+        if (!grounded) rb.linearVelocityY -= getTotalGravity() * Time.deltaTime;
 
-        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
-        {
-            rb.gravityScale = gravityApexMultiplier * gravityScale;
-            apexed = true;
-        }
-        else if (apexed && rb.linearVelocityY < -0.5f)
-        {
-            rb.gravityScale = gravityFallMultiplier * gravityScale;
-        }
-
-        if (!prevGrounded && grounded)
-        {
-            sprite.transform.localScale = squash;
-        }
-        sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, new Vector2(1f, 1f), 10 * Time.deltaTime);
-
-        Debug.Log(rb.linearVelocityX);
+        if (!prevGrounded && grounded) sprite.transform.localScale = originalScale * squash;
+        sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, originalScale, 10 * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -124,20 +112,41 @@ public class Player : MonoBehaviour
 
     public bool isGrounded()
     {
-        return Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, rayLength, groundLayer);
+        return Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
+    }
+
+    public float getTotalGravity()
+    {
+        float totalGravity = gravity * gravityModifier;
+        if (Mathf.Abs(rb.linearVelocityY) < 0.5f && !grounded && !apexed)
+        {
+            totalGravity = gravity * gravityApexMultiplier * gravityModifier;
+        }
+        else if (apexed && rb.linearVelocityY * gravityModifier < -0.5f)
+        {
+            totalGravity = gravity * gravityFallMultiplier * gravityModifier;
+        }
+        return totalGravity;
     }
 
     void Jump()
     {
-        rb.linearVelocityY = jumpForce;
+        rb.linearVelocityY = jumpForce * gravityModifier;
 
         jumpBufferCounter = 0;
         coyoteCounter = 0;
-        sprite.transform.localScale = stretch;
+        sprite.transform.localScale = originalScale * stretch;
+    }
+
+    public void SetInvertedGravity(bool inverted)
+    {
+        gravityModifier = inverted ? -1 : 1;
+        groundCheck.localPosition = new Vector3(initialGroundCheckPosition.x, initialGroundCheckPosition.y * gravityModifier, initialGroundCheckPosition.z);
+        visuals.transform.localScale = new Vector3(1, gravityModifier, 1);
     }
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position - transform.up * rayLength, boxSize);
+        if(groundCheck)Gizmos.DrawCube(groundCheck.position, boxSize);
     }
 }
