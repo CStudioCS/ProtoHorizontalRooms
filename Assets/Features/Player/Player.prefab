@@ -257,7 +257,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
-  moveSpeed: 7
+  moveSpeed: 6
   accelerationWeight: 100
   frictionWeight: 80
   groundCheck: {fileID: 4380973961463484375}
