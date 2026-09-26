@@ -61,12 +61,14 @@ public class Player : MonoBehaviour
     {
         moveAction.Enable();
         jumpAction.Enable();
+        useAbilityAction.Enable();
     }
 
     private void OnDisable()
     {
         moveAction.Disable();
         jumpAction.Disable();
+        useAbilityAction.Disable();
     }
 
     private void Update()
