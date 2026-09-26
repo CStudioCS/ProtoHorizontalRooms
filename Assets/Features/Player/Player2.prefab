@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: moveAction.m_SingletonActionBindings.Array.data[4].m_Path
       value: <Keyboard>/rightArrow
       objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/pageDown
+      objectReference: {fileID: 0}
     - target: {fileID: 4571358873585361581, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.b
       value: 0
@@ -122,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8339870996444838344, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Name
-      value: Red Player Variant
+      value: Player2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

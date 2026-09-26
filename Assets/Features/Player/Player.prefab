@@ -257,6 +257,24 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+  useAbilityAction:
+    m_Name: Use Ability
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0869357c-8f04-4914-a3f8-919f679642a6
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 2d0ab368-c811-4b93-beaf-81dd4a44167e
+      m_Path: <Keyboard>/enter
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Use Ability
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
   moveSpeed: 6
   accelerationWeight: 100
   frictionWeight: 80

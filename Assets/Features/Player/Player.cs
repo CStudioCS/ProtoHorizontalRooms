@@ -5,13 +5,16 @@ public class Player : MonoBehaviour
 {
     public bool IsPlayer1;
     public Player OtherPlayer;
-    public Ability CurrentAbility;
 
     [SerializeField] private Rigidbody2D rb;
 
     [Header("Controls")]
     [SerializeField] private InputAction moveAction;
     [SerializeField] private InputAction jumpAction;
+    [SerializeField] private InputAction useAbilityAction;
+
+    [Header("Ability System")]
+    public Ability currentAbility; // Is not seen by the inspector ?
 
     [Header("Horizontal Movement")]
     public float moveSpeed = 5f;
@@ -83,6 +86,11 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
+        if(useAbilityAction.WasPressedThisFrame() && currentAbility != null)
+        {
+            currentAbility.Use(this);
+        }
+
         // Jump Buffer and Coyote Time
         if (grounded)
         {
@@ -92,9 +100,6 @@ public class Player : MonoBehaviour
         coyoteCounter -= Time.deltaTime;
         jumpBufferCounter -= Time.deltaTime;
 
-        // Handle Gravity
-        if (!grounded) rb.linearVelocityY -= getTotalGravity() * Time.deltaTime;
-
         if (!prevGrounded && grounded) sprite.transform.localScale = originalScale * squash;
         sprite.transform.localScale = Vector2.Lerp(sprite.transform.localScale, originalScale, 10 * Time.deltaTime);
     }
@@ -103,6 +108,9 @@ public class Player : MonoBehaviour
     {
         float weight = Mathf.Abs(currentMoveInput) > 0 ? accelerationWeight : frictionWeight;
         rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
+
+        // Handle Gravity
+        if (!isGrounded()) rb.linearVelocityY -= getTotalGravity() * Time.fixedDeltaTime;
 
         if (jumpBufferCounter > 0 && coyoteCounter > 0)
         {
