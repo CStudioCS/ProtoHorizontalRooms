@@ -1,6 +1,6 @@
 ﻿public class GrapplingHook : Ability
 {
-    public override void Use(Player player)
+    public override void OnUse(Player player)
     {
         //à compléter
     }

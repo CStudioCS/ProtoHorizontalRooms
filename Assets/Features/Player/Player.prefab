@@ -368,9 +368,14 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+  currentAbility:
+    rid: 7336018143261229127
+  dashSpeed: 10
   moveSpeed: 6
-  accelerationWeight: 100
-  frictionWeight: 80
+  groundAcceleration: 100
+  groundFriction: 30
+  airAcceleration: 100
+  airFriction: 30
   isFacingRight: 1
   groundCheck: {fileID: 4380973961463484375}
   boxSize: {x: 0.48, y: 0.1}
@@ -391,6 +396,12 @@ MonoBehaviour:
   dust: {fileID: 7443321042056732980}
   stretch: {x: 0.5, y: 1}
   squash: {x: 1.5, y: 0.5}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7336018143261229127
+      type: {class: DashTest, ns: , asm: Assembly-CSharp}
+      data: 
 --- !u!50 &1006784075463321324
 Rigidbody2D:
   serializedVersion: 5

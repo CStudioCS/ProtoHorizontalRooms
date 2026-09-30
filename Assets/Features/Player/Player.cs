@@ -14,12 +14,17 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction useAbilityAction;
 
     [Header("Ability System")]
-    public Ability currentAbility; // Is not seen by the inspector ?
+    public Ability currentAbility = new DashTest(); // Is not seen by the inspector ?
+
+    [Header("Abilities")]
+    public float dashSpeed = 100f;
 
     [Header("Horizontal Movement")]
-    public float moveSpeed = 5f;
-    public float accelerationWeight = 10f;
-    public float frictionWeight = 8f;
+    public float moveSpeed = 7f;
+    public float groundAcceleration = 150f;
+    public float groundFriction = 30f;
+    public float airAcceleration = 150f;
+    public float airFriction = 30f;
     public bool isFacingRight = true;
     private float currentMoveInput;
 
@@ -93,9 +98,10 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
-        if(useAbilityAction.WasPressedThisFrame() && currentAbility != null)
+        if(currentAbility != null)
         {
-            currentAbility.Use(this);
+            currentAbility.OnUpdate(this);
+            if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
         }
 
         // Jump Buffer and Coyote Time
@@ -114,8 +120,9 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float weight = Mathf.Abs(currentMoveInput) > 0 ? accelerationWeight : frictionWeight;
-        rb.linearVelocityX = Mathf.MoveTowards(rb.linearVelocityX, currentMoveInput * moveSpeed, weight * Time.fixedDeltaTime);
+        // Handle Horizontal Movement
+        if(isGrounded()) rb.linearVelocityX = ComputeHorizontalVelocity(groundAcceleration, groundFriction);
+        else rb.linearVelocityX = ComputeHorizontalVelocity(airAcceleration, airFriction);
 
         // Handle Gravity
         //if (!isGrounded())
@@ -128,6 +135,19 @@ public class Player : MonoBehaviour
         {
             Jump();
         }
+    }
+
+    float ComputeHorizontalVelocity(float acceleration, float friction)
+    {
+        float newVelocity = rb.linearVelocityX;
+        if (currentMoveInput != 0)
+        {
+            float targetVelocityX = currentMoveInput * moveSpeed;
+            newVelocity = Mathf.MoveTowards(newVelocity, targetVelocityX, acceleration * Time.fixedDeltaTime);
+        }
+
+        newVelocity = Mathf.MoveTowards(newVelocity, 0, friction * Time.fixedDeltaTime);
+        return newVelocity;
     }
 
     public bool isGrounded()
@@ -148,6 +168,12 @@ public class Player : MonoBehaviour
             totalGravity = gravity * gravityFallMultiplier * gravityModifier;
         }
         return totalGravity;
+    }
+
+    public void AddSpeed(float x, float y)
+    {
+        rb.linearVelocityX += x;
+        rb.linearVelocityY += y;
     }
 
     void Jump()
