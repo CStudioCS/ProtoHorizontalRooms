@@ -4,13 +4,15 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     public bool IsPlayer1;
+    public bool GodMode = false;
     public Player OtherPlayer;
 
-    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] public Rigidbody2D rb;
 
     [Header("Controls")]
     [SerializeField] private InputAction moveAction;
     [SerializeField] private InputAction jumpAction;
+    [SerializeField] private InputAction crouchAction;
     [SerializeField] private InputAction useAbilityAction;
 
     [Header("Ability System")]
@@ -69,6 +71,7 @@ public class Player : MonoBehaviour
     {
         moveAction.Enable();
         jumpAction.Enable();
+        crouchAction.Enable();
         useAbilityAction.Enable();
     }
 
@@ -76,6 +79,7 @@ public class Player : MonoBehaviour
     {
         moveAction.Disable();
         jumpAction.Disable();
+        crouchAction.Disable();
         useAbilityAction.Disable();
     }
 
@@ -85,6 +89,8 @@ public class Player : MonoBehaviour
         if(currentMoveInput > 0 && !isFacingRight) HorizontalFlip();
         else if (currentMoveInput < 0 && isFacingRight) HorizontalFlip();
 
+        if (GodMode) return;
+        
         bool prevGrounded = grounded;
         grounded = isGrounded();
 
@@ -124,6 +130,11 @@ public class Player : MonoBehaviour
         if(isGrounded()) rb.linearVelocityX = ComputeHorizontalVelocity(groundAcceleration, groundFriction);
         else rb.linearVelocityX = ComputeHorizontalVelocity(airAcceleration, airFriction);
 
+        if(GodMode)
+        {
+            rb.linearVelocityY = (-crouchAction.ReadValue<float>() + jumpAction.ReadValue<float>()) * moveSpeed;
+            return;
+        }
         // Handle Gravity
         //if (!isGrounded())
         {

@@ -45,8 +45,20 @@ PrefabInstance:
       value: 0.31185475
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: crouchAction.m_Name
+      value: Crouch
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: crouchAction.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: moveAction.m_SingletonActionBindings.Array.data[0].m_Id
       value: e2c8bd8d-26e9-4a2b-a785-545ded3eab1e
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: crouchAction.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 60d9c9e1-3034-463c-8360-7372ffb08627
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: jumpAction.m_SingletonActionBindings.Array.data[0].m_Path
@@ -79,6 +91,14 @@ PrefabInstance:
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: moveAction.m_SingletonActionBindings.Array.data[1].m_Flags
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: crouchAction.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/s
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: crouchAction.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Crouch
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Path

@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   IsPlayer1: 1
+  GodMode: 0
   OtherPlayer: {fileID: 0}
   rb: {fileID: 1006784075463321324}
   moveAction:
@@ -350,6 +351,24 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+  crouchAction:
+    m_Name: Crouch
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 053e581b-9f1a-4635-bdd6-c3a1ce92aca0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: e7548f8d-48d6-4da2-83b4-d951b0eee2b8
+      m_Path: <Keyboard>/leftShift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Crouch
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
   useAbilityAction:
     m_Name: Use Ability
     m_Type: 0
@@ -368,8 +387,6 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
-  currentAbility:
-    rid: 7336018143261229127
   dashSpeed: 10
   moveSpeed: 6
   groundAcceleration: 100
@@ -396,12 +413,6 @@ MonoBehaviour:
   dust: {fileID: 7443321042056732980}
   stretch: {x: 0.5, y: 1}
   squash: {x: 1.5, y: 0.5}
-  references:
-    version: 2
-    RefIds:
-    - rid: 7336018143261229127
-      type: {class: DashTest, ns: , asm: Assembly-CSharp}
-      data: 
 --- !u!50 &1006784075463321324
 Rigidbody2D:
   serializedVersion: 5
