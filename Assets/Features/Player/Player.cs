@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     public bool IsPlayer1;
     public Player OtherPlayer;
 
-    [SerializeField] private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     [Header("Controls")]
     [SerializeField] private InputAction moveAction;
