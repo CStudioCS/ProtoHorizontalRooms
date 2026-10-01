@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   OtherPortal: {fileID: 0}
-  teleportOffset: 2
+  teleportCooldown: 0.1
 --- !u!61 &664354346043824529
 BoxCollider2D:
   m_ObjectHideFlags: 0

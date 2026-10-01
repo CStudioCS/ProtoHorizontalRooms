@@ -41,20 +41,24 @@ public class Portal : MonoBehaviour
         }
         OtherPortal.teleportCooldowns[rb] = Time.time + teleportCooldown;
 
-        rb.position = (Vector2)OtherPortal.transform.position;
-        rb.linearVelocity = GetOutputSpeed(rb.linearVelocity);
+        Transform inBasis = transform;
+        Transform outBasis = OtherPortal.transform;
+
+        rb.position = (Vector2)OtherPortal.transform.position + ChangeVectorBasis(rb.position - (Vector2)transform.position, inBasis, outBasis);
+        rb.linearVelocity = ChangeSpeedBasis(rb.linearVelocity, inBasis, outBasis);
     }
 
-    private Vector2 GetOutputSpeed(Vector2 inputDirection)
+    private Vector2 ChangeVectorBasis(Vector2 vector, Transform from, Transform to)
     {
-        // Dans la base du portail de départ
-        float inputX = Vector2.Dot(inputDirection, transform.right);
-        float inputY = Vector2.Dot(inputDirection, transform.up);
+        float x = Vector2.Dot(vector, from.right);
+        float y = Vector2.Dot(vector, from.up);
+        return x * to.right + y * to.up;
+    }
 
-        // Dans la base du portail d'arrivée (Inverse en X)
-        Vector2 outputDirection = -inputX * OtherPortal.transform.right +
-            inputY * OtherPortal.transform.up;
-
-        return outputDirection;
+    private Vector2 ChangeSpeedBasis(Vector2 speed, Transform from, Transform to)
+    {
+        float x = Vector2.Dot(speed, from.right);
+        float y = Vector2.Dot(speed, from.up);
+        return - x * to.right + y * to.up;
     }
 }
