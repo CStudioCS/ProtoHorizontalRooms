@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public bool GodMode = false;
     public Player OtherPlayer;
 
-    [SerializeField] public Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     [Header("Controls")]
     [SerializeField] private InputAction moveAction;
