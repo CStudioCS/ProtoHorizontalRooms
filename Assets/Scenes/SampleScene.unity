@@ -227,6 +227,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 345733353043344268, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
+      propertyPath: m_Anchor.x
+      value: -0.058479786
+      objectReference: {fileID: 0}
+    - target: {fileID: 345733353043344268, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
+      propertyPath: m_Anchor.y
+      value: -0.17544055
+      objectReference: {fileID: 0}
+    - target: {fileID: 345733353043344268, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
+      propertyPath: m_Distance
+      value: 6.072363
+      objectReference: {fileID: 0}
+    - target: {fileID: 345733353043344268, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 1581739384}
     - target: {fileID: 1818027655296713526, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.7769701
@@ -291,6 +307,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c12c55a10dcf2944b95e295832e57078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!50 &732171815 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 5271325550279201223, guid: 3555dc8b71a42b044a6515924f9326e8, type: 3}
+  m_PrefabInstance: {fileID: 732171812}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1256928368
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -299,10 +320,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1967093382395781574, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1967093382395781574, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_Parameters.alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1967093382395781574, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 4177590458815500459, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
       propertyPath: OtherPlayer
       value: 
       objectReference: {fileID: 732171813}
+    - target: {fileID: 4806785810377614088, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_Distance
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806785810377614088, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 6.0084934
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806785810377614088, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -0.43123174
+      objectReference: {fileID: 0}
+    - target: {fileID: 4806785810377614088, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_ConnectedRigidBody
+      value: 
+      objectReference: {fileID: 732171815}
+    - target: {fileID: 4806785810377614088, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+      propertyPath: m_AutoConfigureConnectedAnchor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6864477695017294770, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.231523
@@ -363,6 +416,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c12c55a10dcf2944b95e295832e57078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!50 &1581739384 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1107580075928193347, guid: f78db32be75163346936e0a7b2f5cc3c, type: 3}
+  m_PrefabInstance: {fileID: 1256928368}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1664215932 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9171416624851548098, guid: a1b3b34c151ddca4a9dcbb8fc9f5cfe9, type: 3}

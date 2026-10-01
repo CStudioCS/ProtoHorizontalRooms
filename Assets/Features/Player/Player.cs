@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction useAbilityAction;
 
     [Header("Ability System")]
-    public Ability currentAbility = new DashTest(); // Is not seen by the inspector ?
+    public Ability currentAbility = null; // Is not seen by the inspector ?
 
     [Header("Abilities")]
     public float dashSpeed = 100f;
@@ -102,6 +102,7 @@ public class Player : MonoBehaviour
         {
             currentAbility.OnUpdate(this);
             if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
+            else if (useAbilityAction.WasReleasedThisFrame()) currentAbility.OnQuit(this); 
         }
 
         // Jump Buffer and Coyote Time
