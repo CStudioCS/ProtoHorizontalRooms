@@ -541,6 +541,7 @@ MonoBehaviour:
   initbreakForce: 1000
   breakForce: 400
   strengthTime: 0.5
+  player: {fileID: 4278404934786924292}
 --- !u!254 &4555011849037262357
 RelativeJoint2D:
   m_ObjectHideFlags: 0
