@@ -16,10 +16,13 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction useAbilityAction;
 
     [Header("Ability System")]
-    public Ability currentAbility = null; // Is not seen by the inspector ?
+    public Ability currentAbility = new GrapplingHook(); // Is not seen by the inspector ?
 
     [Header("Abilities")]
     public float dashSpeed = 100f;
+    public float maxGrappleDistance = 10f;
+    public float grappleSpeed = 5f;
+    public float stopGrappleDistance = 1f;
 
     [Header("Horizontal Movement")]
     public float moveSpeed = 7f;
@@ -104,12 +107,12 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
-        if(currentAbility != null)
+        if (useAbilityAction.WasPressedThisFrame())
         {
+            currentAbility.OnUse(this);
             currentAbility.OnUpdate(this);
-            if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
-            else if (useAbilityAction.WasReleasedThisFrame()) currentAbility.OnQuit(this); 
         }
+        else if (useAbilityAction.WasReleasedThisFrame()) currentAbility.OnUse(this);
 
         // Jump Buffer and Coyote Time
         if (grounded)
@@ -141,6 +144,12 @@ public class Player : MonoBehaviour
         {
             rb.linearVelocityY -= getTotalGravity() * Time.fixedDeltaTime;
             if (rb.linearVelocityY * gravityModifier < -maxFallSpeed) rb.linearVelocityY = -gravityModifier * maxFallSpeed;
+        }
+
+        if (useAbilityAction.WasPressedThisFrame())
+        {
+            currentAbility.OnUse(this);
+            currentAbility.OnUpdate(this);
         }
 
         if (jumpBufferCounter > 0 && coyoteCounter > 0)

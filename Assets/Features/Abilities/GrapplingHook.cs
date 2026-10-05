@@ -4,32 +4,53 @@ using UnityEngine;
 public class GrapplingHook : Ability
 {
 
-    public LineRenderer lineRenderer;
-    public DistanceJoint2D distanceJoint;
-    public override void OnUpdate(Player player)
-    {
-        distanceJoint.enabled = false;
-    }
+    private bool isGrappling = false;
 
     public override void OnUse(Player player)
     {
-        Vector3 targetPos = player.OtherPlayer.transform.position;
-
-        lineRenderer.enabled = true;
-        distanceJoint.enabled = true;
-        lineRenderer.SetPosition(0, targetPos);
-        lineRenderer.SetPosition(1, player.transform.position);
-
-        if (distanceJoint.enabled)
+        if (isGrappling)
         {
-            lineRenderer.SetPosition(0, targetPos);
-            lineRenderer.SetPosition(1, player.transform.position);
+            isGrappling = false;
+            return;
         }
+
+        if (player.OtherPlayer == null)
+        {
+            Debug.Log("No other player found!");
+            return;
+        }
+
+        isGrappling = true;
     }
 
-    public override void OnQuit(Player player)
+    public override void OnUpdate(Player player)
     {
-        distanceJoint.enabled = false;
-        lineRenderer.enabled = false;
+        if (!isGrappling)
+        {
+            return;
+        }
+
+        Vector2 targetPosition = player.OtherPlayer.transform.position;
+        Vector2 playerPosition = player.transform.position;
+
+        Vector2 direction = targetPosition - playerPosition;
+
+        float distance = direction.magnitude;
+
+        if (distance <= player.stopGrappleDistance)
+        {
+            isGrappling = false;
+            player.OtherPlayer.rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        if (distance <= player.maxGrappleDistance)
+        {
+            isGrappling = false;
+            return;
+        }
+
+        direction.Normalize();
+        player.OtherPlayer.rb.linearVelocity = direction * player.grappleSpeed;
     }
 }
