@@ -28,6 +28,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4065981986768177478, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: grabAction.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/rightShift
+      objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: IsPlayer1
       value: 0
@@ -74,7 +78,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <Keyboard>/pageDown
+      value: <Keyboard>/slash
       objectReference: {fileID: 0}
     - target: {fileID: 4571358873585361581, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.b

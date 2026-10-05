@@ -44,12 +44,28 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.31185475
       objectReference: {fileID: 0}
+    - target: {fileID: 4065981986768177478, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: grabAction.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4065981986768177478, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: grabAction.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 4b04aaad-72d3-4df0-9760-550f53d466fe
+      objectReference: {fileID: 0}
+    - target: {fileID: 4065981986768177478, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: grabAction.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Keyboard>/e
+      objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: crouchAction.m_Name
       value: Crouch
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: crouchAction.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: useAbilityAction.m_SingletonActionBindings.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
@@ -101,8 +117,12 @@ PrefabInstance:
       value: Crouch
       objectReference: {fileID: 0}
     - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
+      propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 8c2be726-90b7-459b-a5b8-37f280f81a5b
+      objectReference: {fileID: 0}
+    - target: {fileID: 4278404934786924292, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: useAbilityAction.m_SingletonActionBindings.Array.data[0].m_Path
-      value: <Keyboard>/e
+      value: <Keyboard>/q
       objectReference: {fileID: 0}
     - target: {fileID: 4571358873585361581, guid: e688b74513ef38d4cb2e72173ed5ad3e, type: 3}
       propertyPath: m_Parameters.colorGradient.ctime1

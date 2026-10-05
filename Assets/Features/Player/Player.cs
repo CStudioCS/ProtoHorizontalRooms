@@ -16,7 +16,9 @@ public class Player : MonoBehaviour
     [SerializeField] private InputAction useAbilityAction;
 
     [Header("Ability System")]
-    public Ability currentAbility = new DashTest(); // Is not seen by the inspector ?
+    private Ability currentAbility;
+    [SerializeField] private BoxingGlove boxingGlove;
+    public GrabCrate GrabCrate;
 
     [Header("Abilities")]
     public float dashSpeed = 100f;
@@ -60,11 +62,21 @@ public class Player : MonoBehaviour
     [SerializeField] private Vector2 squash = new Vector2(1.5f, .5f);
     private Vector2 originalScale;
 
+    private ContactFilter2D groundFilter;
+    private readonly Collider2D[] groundHits = new Collider2D[1];
+
     private void Awake()
     {
         rb.gravityScale = 0;
         originalScale = sprite.transform.localScale;
         initialGroundCheckPosition = groundCheck.localPosition;
+
+        currentAbility = boxingGlove;
+
+        groundFilter = new ContactFilter2D();
+        groundFilter.SetLayerMask(groundLayer);
+        groundFilter.useLayerMask = true;
+        groundFilter.useTriggers = false; // Ignores IsTrigger Collider2Ds
     }
 
     private void OnEnable()
@@ -86,11 +98,11 @@ public class Player : MonoBehaviour
     private void Update()
     {
         currentMoveInput = moveAction.ReadValue<float>();
-        if(currentMoveInput > 0 && !isFacingRight) HorizontalFlip();
+        if (currentMoveInput > 0 && !isFacingRight) HorizontalFlip();
         else if (currentMoveInput < 0 && isFacingRight) HorizontalFlip();
 
         if (GodMode) return;
-        
+
         bool prevGrounded = grounded;
         grounded = isGrounded();
 
@@ -104,10 +116,10 @@ public class Player : MonoBehaviour
             rb.linearVelocityY *= jumpReduction;
         }
 
-        if(currentAbility != null)
+        if (currentAbility != null)
         {
             currentAbility.OnUpdate(this);
-            if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
+            //if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
         }
 
         // Jump Buffer and Coyote Time
@@ -127,10 +139,10 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         // Handle Horizontal Movement
-        if(isGrounded()) rb.linearVelocityX = ComputeHorizontalVelocity(groundAcceleration, groundFriction);
+        if (isGrounded()) rb.linearVelocityX = ComputeHorizontalVelocity(groundAcceleration, groundFriction);
         else rb.linearVelocityX = ComputeHorizontalVelocity(airAcceleration, airFriction);
 
-        if(GodMode)
+        if (GodMode)
         {
             rb.linearVelocityY = (-crouchAction.ReadValue<float>() + jumpAction.ReadValue<float>()) * moveSpeed;
             return;
@@ -163,7 +175,8 @@ public class Player : MonoBehaviour
 
     public bool isGrounded()
     {
-        return Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
+        return Physics2D.OverlapBox(groundCheck.position, boxSize, 0f, groundFilter, groundHits) > 0;
+        //return Physics2D.OverlapBox(groundCheck.position, boxSize, 0, groundLayer);
     }
 
     public float getTotalGravity()
@@ -201,7 +214,7 @@ public class Player : MonoBehaviour
     {
         isFacingRight = currentMoveInput >= 0;
         visuals.transform.localScale = new Vector3(isFacingRight ? 1 : -1, visuals.transform.localScale.y, visuals.transform.localScale.z);
-        if(grounded) dust.Play();
+        if (grounded) dust.Play();
     }
 
     void Land()
@@ -220,6 +233,6 @@ public class Player : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if(groundCheck)Gizmos.DrawCube(groundCheck.position, boxSize);
+        if (groundCheck) Gizmos.DrawCube(groundCheck.position, boxSize);
     }
 }
