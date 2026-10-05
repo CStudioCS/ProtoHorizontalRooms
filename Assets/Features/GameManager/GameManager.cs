@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("Players")]
     public Player Player1;
     public Player Player2;
+    public Crate Crate;
 
     [Header("Transition Settings")]
     [SerializeField] private Camera Camera;
@@ -38,7 +40,21 @@ public class GameManager : MonoBehaviour
         CurrentMap.RespawnPlayer(Player2);
     }
 
-    public IEnumerator TransitionRoutine(bool isLeftTransition, Player transitioningPlayer)
+    private void Update()
+    {
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            CurrentMap.RespawnPlayer(Player1);
+            CurrentMap.RespawnPlayer(Player2);
+        }
+
+        if (Keyboard.current.yKey.wasPressedThisFrame)
+        {
+            Crate.transform.position = Player1.transform.position + new Vector3(1, 0, 0);
+        }
+    }
+
+    public IEnumerator TransitionRoutine(bool isLeftTransition)
     {
         //deactivate transition
         LeftTransition.CanTransition = false;
@@ -51,6 +67,18 @@ public class GameManager : MonoBehaviour
         float time = 0;
         Vector3 initPos = Camera.transform.position;
 
+        //move player who triggered the transition
+        Vector2 playerMoveOffset = new Vector2(2.5f, 0);
+        //transitioningPlayer.transform.position += mapIndexChange * (Vector3)playerMoveOffset;
+        Player1.GrabCrate.Drop();
+        Player2.GrabCrate.Drop();
+        Crate.transform.position += mapIndexChange * (Vector3)playerMoveOffset;
+
+        //respawn player 2
+        //CurrentMap.RespawnPlayer(transitioningPlayer.OtherPlayer);
+        newMap.RespawnPlayer(Player1);
+        newMap.RespawnPlayer(Player2);
+
         while (time < TransitionDuration)
         {
             Camera.transform.position = Vector3.Lerp(initPos, initPos + new Vector3(OffsetX, 0, 0) * mapIndexChange, time / TransitionDuration);
@@ -61,17 +89,12 @@ public class GameManager : MonoBehaviour
 
         Camera.transform.position = initPos + new Vector3(OffsetX, 0, 0) * mapIndexChange;
 
-        //move player who triggered the transition
-        Vector2 playerMoveOffset = new Vector2(1.5f, 0);
-        transitioningPlayer.transform.position += mapIndexChange * (Vector3)playerMoveOffset;
+
 
         //Destroy previous map and set current map to the new one
         Destroy(CurrentMap.gameObject);
         CurrentMapIndex += mapIndexChange;
         CurrentMap = newMap;
-
-        //respawn player 2
-        CurrentMap.RespawnPlayer(transitioningPlayer.OtherPlayer);
 
 
         //Maybe here give the new items to the players ??

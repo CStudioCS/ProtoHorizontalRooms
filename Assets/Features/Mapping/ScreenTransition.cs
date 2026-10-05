@@ -7,9 +7,7 @@ public class ScreenTransition : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (CanTransition && other.TryGetComponent<Player>(out Player player) && ((isLeftTransition && !player.IsPlayer1) || (!isLeftTransition && player.IsPlayer1)))
-        {
-            StartCoroutine(GameManager.Instance.TransitionRoutine(isLeftTransition, player));
-        }
+        if (CanTransition && other.TryGetComponent<Crate>(out Crate crate))
+            StartCoroutine(GameManager.Instance.TransitionRoutine(isLeftTransition));
     }
 }

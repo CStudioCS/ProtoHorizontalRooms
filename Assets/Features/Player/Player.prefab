@@ -259,6 +259,9 @@ GameObject:
   - component: {fileID: 4278404934786924292}
   - component: {fileID: 1006784075463321324}
   - component: {fileID: 7573515635320103377}
+  - component: {fileID: -2866085863182020467}
+  - component: {fileID: 4065981986768177478}
+  - component: {fileID: 4555011849037262357}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -387,6 +390,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
+  boxingGlove: {fileID: -2866085863182020467}
+  GrabCrate: {fileID: 4065981986768177478}
   dashSpeed: 10
   moveSpeed: 6
   groundAcceleration: 100
@@ -398,7 +403,7 @@ MonoBehaviour:
   boxSize: {x: 0.48, y: 0.1}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 375
   jumpForce: 16
   jumpReduction: 0.5
   jumpBufferTimer: 0.15
@@ -486,6 +491,76 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.3, y: 0.8}
   m_EdgeRadius: 0.1
+--- !u!114 &-2866085863182020467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339870996444838344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df9910ef840d2fb45aa6efba021d839f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoxingGlove
+  forceStrength: 10
+--- !u!114 &4065981986768177478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339870996444838344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af1906281b965045953a00f0b4684ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrabCrate
+  grabAction:
+    m_Name: Grab
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e019d1c6-b30e-47d5-8213-b110f2a6a0e1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a08255b8-475a-4c20-8327-f9c5b47d4306
+      m_Path: 
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Grab
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
+  CrateJoint: {fileID: 4555011849037262357}
+  coll: {fileID: 7573515635320103377}
+  holdingOffset: {x: 0, y: 1}
+  maxGrabDistance: 1
+  initbreakForce: 1000
+  breakForce: 400
+  strengthTime: 0.5
+--- !u!254 &4555011849037262357
+RelativeJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339870996444838344}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: 50
+  m_BreakTorque: Infinity
+  m_BreakAction: 2
+  m_MaxForce: 200
+  m_MaxTorque: 200
+  m_CorrectionScale: 0.3
+  m_AutoConfigureOffset: 0
+  m_LinearOffset: {x: 0, y: 0}
+  m_AngularOffset: 0
 --- !u!1001 &8233011379608591077
 PrefabInstance:
   m_ObjectHideFlags: 0
