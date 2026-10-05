@@ -4,7 +4,7 @@ public class Crate : MonoBehaviour
 {
     public Rigidbody2D Rb;
     public BoxCollider2D Collider;
-    private Player holdingPlayer;
+    public Player holdingPlayer;
 
     [SerializeField] private float heldMass = 0.2f;
     [SerializeField] private float notHeldMass = 1f;

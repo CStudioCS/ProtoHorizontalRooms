@@ -8,7 +8,7 @@ public class GrabCrate : MonoBehaviour
 
     public RelativeJoint2D CrateJoint;
     [SerializeField] private Collider2D coll;
-    [SerializeField] private Vector2 holdingOffset = new Vector2(1, 0);
+    public Vector2 holdingOffset = new Vector2(1, 0);
     [SerializeField] private float maxGrabDistance = 1.5f;
     [SerializeField] private float initbreakForce = 100f;
     [SerializeField] private float breakForce = 30f;
