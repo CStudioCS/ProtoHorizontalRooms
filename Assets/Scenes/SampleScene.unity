@@ -543,6 +543,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9345692b2510ad4fa7c1f10daf143fb, type: 3}
+--- !u!114 &1909305073 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 465033733019951509, guid: b9345692b2510ad4fa7c1f10daf143fb, type: 3}
+  m_PrefabInstance: {fileID: 1708847747}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5210e31db8c893a469d7eac5111a5d3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
 --- !u!114 &2129689801 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 422582171446454791, guid: a1b3b34c151ddca4a9dcbb8fc9f5cfe9, type: 3}
@@ -661,7 +672,7 @@ PrefabInstance:
     - target: {fileID: 7383388238450354622, guid: 86e1f67d567f5cc4690166d2dbb65c53, type: 3}
       propertyPath: CurrentMap
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1909305073}
     - target: {fileID: 7383388238450354622, guid: 86e1f67d567f5cc4690166d2dbb65c53, type: 3}
       propertyPath: LeftTransition
       value: 

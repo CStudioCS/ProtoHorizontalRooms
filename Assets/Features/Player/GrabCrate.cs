@@ -14,6 +14,7 @@ public class GrabCrate : MonoBehaviour
     [SerializeField] private float breakForce = 30f;
     [SerializeField] private float strengthTime = 0.4f;
     private bool inStrength = false;
+    public Player player;
 
     private void Awake()
     {
@@ -38,7 +39,7 @@ public class GrabCrate : MonoBehaviour
             {
                 Drop();
             }
-            else if (coll.Distance(GameManager.Instance.Crate.Collider).distance < maxGrabDistance)
+            else if (!player.OtherPlayer.GrabCrate.CrateJoint.enabled && coll.Distance(GameManager.Instance.Crate.Collider).distance < maxGrabDistance)
             {
                 CrateJoint.connectedBody = GameManager.Instance.Crate.Rb;
                 CrateJoint.enabled = true;
