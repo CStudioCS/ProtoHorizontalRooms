@@ -8,7 +8,7 @@ public class GrabCrate : MonoBehaviour
 
     public RelativeJoint2D CrateJoint;
     [SerializeField] private Collider2D coll;
-    public Vector2 holdingOffset = new Vector2(1, 0);
+    [SerializeField] private Vector2 holdingOffset = new Vector2(1, 0);
     [SerializeField] private float maxGrabDistance = 1.5f;
     [SerializeField] private float initbreakForce = 100f;
     [SerializeField] private float breakForce = 30f;
@@ -41,14 +41,19 @@ public class GrabCrate : MonoBehaviour
             }
             else if (!player.OtherPlayer.GrabCrate.CrateJoint.enabled && coll.Distance(GameManager.Instance.Crate.Collider).distance < maxGrabDistance)
             {
-                CrateJoint.connectedBody = GameManager.Instance.Crate.Rb;
-                CrateJoint.enabled = true;
-                CrateJoint.linearOffset = new Vector2(holdingOffset.x * (GetComponent<Player>().isFacingRight ? 1 : -1), holdingOffset.y);
-                CrateJoint.angularOffset = 0;
-                StopAllCoroutines();
-                StartCoroutine(StrengthWait());
+                Grab();
             }
         }
+    }
+
+    public void Grab()
+    {
+        CrateJoint.connectedBody = GameManager.Instance.Crate.Rb;
+        CrateJoint.enabled = true;
+        CrateJoint.linearOffset = new Vector2(holdingOffset.x * (GetComponent<Player>().isFacingRight ? 1 : -1), holdingOffset.y * GetComponent<Player>().gravityModifier);
+        CrateJoint.angularOffset = 0;
+        StopAllCoroutines();
+        StartCoroutine(StrengthWait());
     }
 
     public void TryDrop()
@@ -62,6 +67,16 @@ public class GrabCrate : MonoBehaviour
         CrateJoint.connectedBody = null;
         CrateJoint.enabled = false;
     }
+    public void UpdateJointOffset()
+    {
+        if (!CrateJoint.enabled) return;
+        CrateJoint.linearOffset = new Vector2(
+            holdingOffset.x * (player.isFacingRight ? 1 : -1),
+            holdingOffset.y * player.gravityModifier
+        );
+    }
+
+
 
     private IEnumerator StrengthWait()
     {
