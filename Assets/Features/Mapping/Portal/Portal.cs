@@ -49,7 +49,7 @@ public class Portal : MonoBehaviour
             Rigidbody2D crateRb = player.GrabCrate.CrateJoint.connectedBody;
             if (crateRb != null)
             {
-                TeleportHeldCrate(player, crateRb);
+                TeleportObject(crateRb);
             }
         }
     }
@@ -63,19 +63,6 @@ public class Portal : MonoBehaviour
         rb.linearVelocity = ChangeSpeedBasis(rb.linearVelocity, inBasis, outBasis);
         if (rb.linearVelocity.sqrMagnitude < 3f * 3f) rb.linearVelocity = 3f * rb.linearVelocity.normalized;
     }
-
-    private void TeleportHeldCrate(Player player, Rigidbody2D crateRb)
-    {
-        RelativeJoint2D joint = player.GrabCrate.CrateJoint;
-        Vector2 targetOffset = (Vector2)(player.transform.rotation * joint.linearOffset);
-        crateRb.position = player.rb.position + targetOffset;
-        crateRb.linearVelocity = player.rb.linearVelocity;
-        crateRb.angularVelocity = 0f;
-        crateRb.rotation = player.rb.rotation + joint.angularOffset;
-        OtherPortal.teleportCooldowns[crateRb] = Time.time + teleportCooldown;
-    }
-
-
 
     private Vector2 ChangeVectorBasis(Vector2 vector, Transform from, Transform to)
     {
