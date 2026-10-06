@@ -61,7 +61,6 @@ public class Portal : MonoBehaviour
 
         rb.position = (Vector2)OtherPortal.transform.position + ChangeVectorBasis(rb.position - (Vector2)transform.position, inBasis, outBasis);
         rb.linearVelocity = ChangeSpeedBasis(rb.linearVelocity, inBasis, outBasis);
-        if (rb.linearVelocity.sqrMagnitude < 3f * 3f) rb.linearVelocity = 3f * rb.linearVelocity.normalized;
     }
 
     private Vector2 ChangeVectorBasis(Vector2 vector, Transform from, Transform to)
