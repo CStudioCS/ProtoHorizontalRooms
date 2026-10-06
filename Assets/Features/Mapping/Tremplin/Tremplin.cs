@@ -9,9 +9,9 @@ public class Tremplin_script : MonoBehaviour
         //recuperer l'objet, vérifier que c'est un joueur, obtenir le rigid
         if (other.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
         {
-            float rotation = (transform.eulerAngles.z) * Mathf.Deg2Rad;
-            rb.linearVelocityY = Mathf.Cos(rotation) * speed;
-            rb.linearVelocityX = Mathf.Sin(rotation) * speed;
+            rb.linearVelocity = transform.up * speed + Vector2.Dot(rb.linearVelocity, transform.right) * transform.right; 
+
+
         }
 
     }
