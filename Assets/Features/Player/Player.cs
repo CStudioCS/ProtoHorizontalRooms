@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
         if (currentAbility != null)
         {
             currentAbility.OnUpdate(this);
-            //if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
+            if (useAbilityAction.WasPressedThisFrame()) currentAbility.OnUse(this);
         }
 
         // Jump Buffer and Coyote Time

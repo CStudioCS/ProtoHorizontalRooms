@@ -10,6 +10,8 @@ public class Map : MonoBehaviour
             player.transform.position = transform.position + (Vector3)Player1Spawn;
         else
             player.transform.position = transform.position + (Vector3)Player2Spawn;
+
+        player.rb.linearVelocity = Vector2.zero;
     }
 
     private void OnDrawGizmosSelected()
