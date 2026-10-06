@@ -35,12 +35,27 @@ public class Portal : MonoBehaviour
     {
         if (!(OtherPortal && other.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))) return;
 
+        if (other.TryGetComponent<Crate>(out Crate crate) && crate.holdingPlayer) return;
+
         if (teleportCooldowns.TryGetValue(rb, out float expirationTime))
         {
             if (Time.time < expirationTime) return;
         }
         OtherPortal.teleportCooldowns[rb] = Time.time + teleportCooldown;
 
+        TeleportObject(rb);
+        if (other.TryGetComponent<Player>(out Player player) && player.GrabCrate.CrateJoint.enabled)
+        {
+            Rigidbody2D crateRb = player.GrabCrate.CrateJoint.connectedBody;
+            if (crateRb != null)
+            {
+                TeleportObject(crateRb);
+            }
+        }
+    }
+
+    private void TeleportObject(Rigidbody2D rb)
+    {
         Transform inBasis = transform;
         Transform outBasis = OtherPortal.transform;
 
