@@ -6,6 +6,7 @@ public class Portal : MonoBehaviour
     [Header("Portal Settings")]
     public Portal OtherPortal;
     public float teleportCooldown = 0.1f;
+    public float multiplier = 1.1f;
 
     private Dictionary<Rigidbody2D, float> teleportCooldowns = new Dictionary<Rigidbody2D, float>();
 
@@ -44,13 +45,17 @@ public class Portal : MonoBehaviour
         OtherPortal.teleportCooldowns[rb] = Time.time + teleportCooldown;
 
         TeleportObject(rb);
-        if (other.TryGetComponent<Player>(out Player player) && player.GrabCrate.CrateJoint.enabled)
+        if (other.TryGetComponent<Player>(out Player player))
         {
-            Rigidbody2D crateRb = player.GrabCrate.CrateJoint.connectedBody;
-            if (crateRb != null)
+            if (player.GrabCrate.CrateJoint.enabled)
             {
-                TeleportObject(crateRb);
+                Rigidbody2D crateRb = player.GrabCrate.CrateJoint.connectedBody;
+                if (crateRb != null)
+                {
+                    TeleportObject(crateRb);
+                }
             }
+            player.KeepVelocityNextStep();
         }
     }
 
@@ -60,7 +65,9 @@ public class Portal : MonoBehaviour
         Transform outBasis = OtherPortal.transform;
 
         rb.position = (Vector2)OtherPortal.transform.position + ChangeVectorBasis(rb.position - (Vector2)transform.position, inBasis, outBasis);
-        rb.linearVelocity = ChangeSpeedBasis(rb.linearVelocity, inBasis, outBasis);
+        rb.linearVelocity = multiplier * ChangeSpeedBasis(rb.linearVelocity, inBasis, outBasis);
+
+        if (rb.linearVelocity.magnitude < 3f) rb.linearVelocity = 3f * rb.linearVelocity.normalized;
     }
 
     private Vector2 ChangeVectorBasis(Vector2 vector, Transform from, Transform to)

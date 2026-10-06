@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float gravityApexMultiplier = .5f;
     [SerializeField] private float gravityFallMultiplier = 2f;
     [SerializeField] private float maxFallSpeed = 2f;
+    private bool keepVelocityNextStep = false;
 
     [Header("Visuals")]
     [SerializeField] private GameObject visuals;
@@ -138,6 +139,12 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(keepVelocityNextStep)
+        {
+            keepVelocityNextStep = false;
+            return;
+        }
+
         // Handle Horizontal Movement
         if (isGrounded()) rb.linearVelocityX = ComputeHorizontalVelocity(groundAcceleration, groundFriction);
         else rb.linearVelocityX = ComputeHorizontalVelocity(airAcceleration, airFriction);
@@ -158,6 +165,11 @@ public class Player : MonoBehaviour
         {
             Jump();
         }
+    }
+
+    public void KeepVelocityNextStep()
+    {
+        keepVelocityNextStep = true;
     }
 
     float ComputeHorizontalVelocity(float acceleration, float friction)
