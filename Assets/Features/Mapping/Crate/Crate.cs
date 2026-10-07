@@ -9,6 +9,11 @@ public class Crate : MonoBehaviour
     [SerializeField] private float heldMass = 0.2f;
     [SerializeField] private float notHeldMass = 1f;
 
+    private void Awake()
+    {
+        Rb.mass = notHeldMass;
+    }
+
     private void Update()
     {
         if (GameManager.Instance.Player1.GrabCrate.CrateJoint.enabled)
