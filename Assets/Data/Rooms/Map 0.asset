@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0350c3006a05d34ea48775e58b551ef, type: 3}
+  m_Name: Map 0
+  m_EditorClassIdentifier: Assembly-CSharp::MapDefinition
+  rooms:
+  - room: {fileID: 11400000, guid: d9381072a5bdd554e8395e3872ef6126, type: 2}
+    position: {x: 0, y: 0, z: 0}
+  - room: {fileID: 11400000, guid: 9d2cd6c600d590544a9cc256a6d9c0e3, type: 2}
+    position: {x: -18, y: 0, z: 0}
+  - room: {fileID: 11400000, guid: 097e0917f2714cf48840668aea96babf, type: 2}
+    position: {x: 18, y: 0, z: 0}
+  StartingRoom: {fileID: 11400000, guid: d9381072a5bdd554e8395e3872ef6126, type: 2}

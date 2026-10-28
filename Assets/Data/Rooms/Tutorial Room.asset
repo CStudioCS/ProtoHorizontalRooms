@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9a540306e089534abcb86b6e81199ea, type: 3}
+  m_Name: Tutorial Room
+  m_EditorClassIdentifier: Assembly-CSharp::RoomDefinition
+  roomId: tutorial_room
+  roomPrefab: {fileID: 3092711756605247765, guid: f4c728792e6a63944a5acdb23a9bd669, type: 3}
+  roomSize: {x: 18, y: 10}
