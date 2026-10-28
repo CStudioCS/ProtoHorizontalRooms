@@ -211,7 +211,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &872304233
+--- !u!1001 &1381113586
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -221,15 +221,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 984600019073320088, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
       propertyPath: m_Name
-      value: Managers
+      value: Persistent Managers
       objectReference: {fileID: 0}
     - target: {fileID: 1200659718941511806, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 180.93068
+      value: 149.65874
       objectReference: {fileID: 0}
     - target: {fileID: 1200659718941511806, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 95.81902
+      value: 106.06845
       objectReference: {fileID: 0}
     - target: {fileID: 1200659718941511806, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -263,14 +263,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9003164292977175911, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
-      propertyPath: transitionEffectManager
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5357578390518288939, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
-    - {fileID: 8139705195387281640, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8216499c8952af49a0b5083963c40b3, type: 3}
@@ -279,4 +273,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 485741065}
-  - {fileID: 872304233}
+  - {fileID: 1381113586}
