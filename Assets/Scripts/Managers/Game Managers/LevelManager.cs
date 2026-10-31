@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -14,9 +12,9 @@ public class LevelManager : MonoBehaviour
     public Player Player2Instance { get; private set; }
 
     [SerializeField] private MapDefinition Map;
-    private RoomDefinition Room;
-    private GameObject roomInstance;
-    public bool isTransitioning { get; private set; }
+    private Room roomInstance;
+    private int currentRoomIndex;
+    public bool IsTransitioning { get; private set; }
 
     public Action OnRoomEnter;
     public Action OnTransitionBegin;
@@ -40,57 +38,70 @@ public class LevelManager : MonoBehaviour
         Player1Instance = Instantiate(player1Prefab);
         Player2Instance = Instantiate(player2Prefab);
 
-        BeginTransition(Map.StartingRoom);
+        currentRoomIndex = Map.StartingRoomIndex;
+        BeginTransition(Map.Rooms[currentRoomIndex], Vector3.zero);
     }
 
     public void ChangeRoom(bool right)
     {
         if (GameStateManager.Instance.GameState != GameState.INGAME) return;
 
-        Vector3 roomPosition = Map.GetRoomPosition(Room);
-        var roomBounds = Room.GetBounds(roomPosition);
-        RoomDefinition nextRoom = Map.GetRoomAt(new Vector3(
-            (right ? roomBounds.xMax + 0.01f : roomBounds.xMin - 0.01f),
-            roomPosition.y,
-            roomPosition.z
-        ));
-
-        if(nextRoom == null)
+        int delta = (right ? 1 : -1);
+        currentRoomIndex += delta;
+        if(currentRoomIndex < 0 || currentRoomIndex >= Map.Rooms.Length)
         {
+            Debug.Log(currentRoomIndex - delta + "->" + currentRoomIndex);
             GameStateManager.Instance.RequestMenu(MenuType.ENDSCREEN);
             return;
         }
 
-        BeginTransition(nextRoom);
+        Room nextRoom = Map.Rooms[currentRoomIndex];
+
+
+        // GOAL : entered + roomPos = exit + nextRoomPos
+        Vector3 enteredDoorLocalPosition, exitDoorLocalPosition;
+        if(right)
+        {
+            enteredDoorLocalPosition = roomInstance.GetRightDoorPosition();
+            exitDoorLocalPosition = nextRoom.GetLeftDoorPosition();
+        }
+        else
+        {
+            enteredDoorLocalPosition = roomInstance.GetLeftDoorPosition();
+            exitDoorLocalPosition = nextRoom.GetRightDoorPosition();
+        }
+
+        Vector3 nextRoomPos = roomInstance.transform.position + enteredDoorLocalPosition - exitDoorLocalPosition;
+
+        Debug.Log(nextRoomPos);
+
+        BeginTransition(nextRoom, nextRoomPos);
     }
 
-    private void BeginTransition(RoomDefinition nextRoom)
+    private void BeginTransition(Room nextRoomPrefab, Vector3 nextRoomPos)
     {
-        if(!isTransitioning && nextRoom != null)
-            StartCoroutine(TransitionRoom(nextRoom));
+        if(!IsTransitioning && nextRoomPrefab != null)
+            StartCoroutine(TransitionRoom(nextRoomPrefab, nextRoomPos));
     }
 
-    private IEnumerator TransitionRoom(RoomDefinition nextRoom)
+    private IEnumerator TransitionRoom(Room nextRoomPrefab, Vector3 nextRoomPos)
     {
-        isTransitioning = true;
+        IsTransitioning = true;
         OnTransitionBegin?.Invoke();
 
-        Vector3 nextRoomPos = Map.GetRoomPosition(nextRoom);
-
-        GameObject oldRoomInstance = roomInstance;
-        GameObject nextRoomInstance = Instantiate(
-            nextRoom.roomPrefab,
+        Room oldRoomInstance = roomInstance;
+        Room nextRoomInstance = Instantiate(
+            nextRoomPrefab,
             nextRoomPos,
             Quaternion.identity);
 
         if(transitionEffectManager) yield return transitionEffectManager.TransitionEffect(nextRoomPos);
 
-        Room = nextRoom;
         roomInstance = nextRoomInstance;
 
-        if(oldRoomInstance != null) Destroy(oldRoomInstance);
+        if(oldRoomInstance != null) Destroy(oldRoomInstance.gameObject);
 
-        isTransitioning = false;
+        IsTransitioning = false;
         OnRoomEnter?.Invoke();
     }
 }

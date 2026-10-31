@@ -8,7 +8,7 @@ public class RoomTransitionDetector : MonoBehaviour
     {
         if (GameStateManager.Instance.GameState != GameState.INGAME) return;
 
-        if (!LevelManager.Instance.isTransitioning && other.TryGetComponent<Player>(out Player player))
+        if (!LevelManager.Instance.IsTransitioning && other.TryGetComponent<Player>(out Player player))
         {
             LevelManager.Instance.ChangeRoom(isRightTransition);
         }
